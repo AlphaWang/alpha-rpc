@@ -1,5 +1,5 @@
-namespace java com.alphawang.rpc.thrift.message.service
-namespace py message.service.api
+namespace java com.alphawang.rpc.thrift.message.generated
+namespace py message.service.generated
 
 service MessageService {
     bool sendMobileMessage(1:string mobile, 2:string message);
