@@ -1,1 +1,3 @@
 rootProject.name = 'alpha-rpc'
+include 'message-thrift-api-gen'
+
