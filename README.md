@@ -9,6 +9,8 @@
 ## Prerequisites
 
 ### install thrift
+https://www.imooc.com/article/30296
+
 1. Download thrift [thrift.apache.org](http://thrift.apache.org)
 2. Config
 ```
@@ -16,7 +18,14 @@
 ```
 3. Make
 ```
+make && make install
 ```
 
+
+### run mysql docker
+```
+cd mysql
+sh run-mysql.sh
+```
 
 ### run redis docker
