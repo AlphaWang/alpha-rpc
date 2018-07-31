@@ -1,4 +1,5 @@
 rootProject.name = 'alpha-rpc'
 include 'message-thrift-api-gen'
 include 'user-thrift-service-api'
+include 'user-thrift-service'
 
