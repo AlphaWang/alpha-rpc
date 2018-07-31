@@ -2,6 +2,7 @@
 .gradle
 /build/
 /*/build/
+/mysql/data/
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###

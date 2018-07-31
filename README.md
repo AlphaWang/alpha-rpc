@@ -28,4 +28,13 @@ cd mysql
 sh run-mysql.sh
 ```
 
+### db tables:
+`db_user.pe_user`   
+- id int
+- username varchar
+- password varchar
+- real_name varchar
+- mobile varchar
+- email varchar
+
 ### run redis docker
