@@ -9,10 +9,14 @@
 ## Prerequisites
 
 ### install thrift
-Download thrift [thrift.apache.org](http://thrift.apache.org)
+1. Download thrift [thrift.apache.org](http://thrift.apache.org)
+2. Config
+```
+./configure --with-qt4=no  --with-qt5=no  --with-c_glib=no  --with-csharp=no  --with-erlang=no  --with-nodejs=no  --with-lua=no  --with-perl=no  --with-php=no  --with-php_extension=no  --with-dart=no  --with-ruby=no  --with-haskell=no  --with-go=no  --with-haxe=no  --with-d=no
+```
+3. Make
+```
+```
 
-or
-```
-brew install thrift
-```
+
 ### run redis docker

@@ -33,16 +33,16 @@ class MessageServiceHandler:
             print 'send mail failed.'
             print ex
             return False
-        
+
 
 if __name__ == '__main__':
     handler = MessageServiceHandler()
     processor = MessageService.Processor(handler)
     transport = TSocket.TServerSocket("localhost", "9090")
-    tfactory = TTransport.TFramedTransportFactory()
-    pfactory = TBinaryProtocal.TBinaryProtocalFactory()
+    transportFactory = TTransport.TFramedTransportFactory()
+    protocolFactory = TBinaryProtocal.TBinaryProtocolFactory()
 
-    server = TServer.TSimpleServer(processor, transport, tfactory, pfactory)
+    server = TServer.TSimpleServer(processor, transport, transportFactory, protocolFactory)
     print "==========python thrift server start."
     server.serve()
     print "==========python thrift server exit."
