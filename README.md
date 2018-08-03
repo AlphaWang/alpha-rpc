@@ -42,3 +42,12 @@ sh run-mysql.sh
 cd redis
 sh run-redis.sh
 ```
+
+test connection:
+```
+netstat -na | grep 6379
+
+telnet localhost 6379
+set a b
+get a
+```

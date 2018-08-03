@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-docker stop redis
-docker rm redis
-docker run -idt -p6379:6379 -v `pwd`/data:/data  --name redis -v `pwd`/conf/redis.conf:/etc/redis/redis_default.conf hub.c.163.com/public/redis:2.8.4
+docker stop alpha-rpc-redis
+docker rm alpha-rpc-redis
+docker run --name alpha-rpc-redis -idt -p 6379:6379 -v `pwd`/data:/data -v `pwd`/conf/redis.conf:/etc/redis/redis_default.conf redis:latest
