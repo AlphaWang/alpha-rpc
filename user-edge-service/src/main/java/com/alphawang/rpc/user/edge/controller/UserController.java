@@ -27,7 +27,7 @@ public class UserController {
         @RequestParam("password") String password) {
      
         // 1. 验证
-        UserInfo userInfo = null
+        UserInfo userInfo = null;
         try {
             userInfo = serviceProvider.getUserService().getUserByName(username);
         } catch (TException e) {
@@ -49,6 +49,8 @@ public class UserController {
         String token = genToken();
         
         // 3. 缓存用户
+        
+        return Response.success(null);
     }
 
     private String genToken() {
