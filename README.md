@@ -38,3 +38,7 @@ sh run-mysql.sh
 - email varchar
 
 ### run redis docker
+```
+cd redis
+sh run-redis.sh
+```
