@@ -23,4 +23,10 @@ public class Response<T> implements Serializable {
         response.setData(data);
         return response;
     }
+
+    public static <T>  Response fail(T data) {
+        Response<T> response = new Response<>("00", "ERROR");
+        response.setData(data);
+        return response;
+    }
 }

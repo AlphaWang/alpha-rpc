@@ -1,14 +1,20 @@
 package com.alphawang.rpc.user.edge.controller;
 
 import com.alphawang.rpc.thrift.user.service.api.UserInfo;
+import com.alphawang.rpc.user.edge.dto.UserDto;
+import com.alphawang.rpc.user.edge.redis.RedisClient;
 import com.alphawang.rpc.user.edge.response.Response;
 import com.alphawang.rpc.user.edge.thrift.ServiceProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.apache.tomcat.util.buf.HexUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -21,7 +27,11 @@ public class UserController {
     
     @Autowired
     private ServiceProvider serviceProvider;
+    @Autowired
+    private RedisClient redisClient;
     
+    @PostMapping("/login")
+    @ResponseBody
     public Response<String> login(
         @RequestParam("username") String username,
         @RequestParam("password") String password) {
@@ -32,25 +42,29 @@ public class UserController {
             userInfo = serviceProvider.getUserService().getUserByName(username);
         } catch (TException e) {
             log.error("Failed to get UserInfo for {}.", username, e);
-            return Response.ERROR;
+            return Response.fail(e.getMessage());
         }
         
         if (userInfo == null) {
-            return Response.ERROR;
+            return Response.fail("user null");
         }
         
         if (!userInfo.getPassword().equals(md5(password))) {
             log.error("Password NOT match!");
-            return Response.ERROR;
+            return Response.fail("PASSWORD ERROR.");
         }
         
 
         // 2. 生成token
         String token = genToken();
+        log.info("token for {} : {}", username, token);
         
         // 3. 缓存用户
+        UserDto dto = toDto(userInfo);
+        redisClient.set(token, dto, 3600);
+        log.info("save redis for {} : {}", username, token);
         
-        return Response.success(null);
+        return Response.success(token);
     }
 
     private String genToken() {
@@ -77,6 +91,18 @@ public class UserController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * UserInfo 中有太多不必要的对象
+     * @param userInfo
+     * @return
+     */
+    private UserDto toDto(UserInfo userInfo) {
+        UserDto dto = new UserDto();
+        BeanUtils.copyProperties(userInfo, dto);
+        
+        return dto;
     }
     
 }

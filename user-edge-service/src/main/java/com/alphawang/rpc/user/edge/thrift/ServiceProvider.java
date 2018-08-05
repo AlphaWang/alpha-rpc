@@ -17,16 +17,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServiceProvider {
     
-    @Value("thrift.user.ip")
+    @Value("${thrift.user.ip}")
     private String userServiceIp;
     
-    @Value("thrift.user.port")
+    @Value("${thrift.user.port}")
     private int userServicePort;
     
-    @Value("thrift.message.ip")
+    @Value("${thrift.message.ip}")
     private String messageServiceIp;
     
-    @Value("thrift.message.port")
+    @Value("${thrift.message.port}")
     private int messageServicePort;
     
     public UserService.Client getUserService() {
