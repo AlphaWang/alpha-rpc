@@ -6,6 +6,7 @@ import com.alphawang.rpc.user.edge.redis.RedisClient;
 import com.alphawang.rpc.user.edge.response.Response;
 import com.alphawang.rpc.user.edge.thrift.ServiceProvider;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.thrift.TException;
 import org.apache.tomcat.util.buf.HexUtils;
 import org.springframework.beans.BeanUtils;
@@ -65,6 +66,45 @@ public class UserController {
         log.info("save redis for {} : {}", username, token);
         
         return Response.success(token);
+    }
+    
+    public Response sendVerifyCode(
+        @RequestParam(value="mobile", required = false) String mobile,
+        @RequestParam(value="email", required = false) String email) {
+        
+        String message = "verify code is:";
+        String code = randomCode("0123456789", 6);
+
+        try {
+            boolean result = false;
+            if (StringUtils.isNotBlank(mobile)) {
+                result = serviceProvider.getMessageService().sendMobileMessage(mobile, message + code);
+            } else if (StringUtils.isNotBlank(email)) {
+                result = serviceProvider.getMessageService().sendEmailMessage(email, message + code);
+            } else {
+                return Response.fail("mobile or email should not empty");
+            }
+        } catch (TException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public Response<String> register(@RequestParam("username") String username,
+                             @RequestParam("password") String password,
+        @RequestParam(value="mobile", required = false) String mobile,
+        @RequestParam(value="email", required = false) String email,
+        @RequestParam("verifyCode") String verifyCode) {
+        
+        if (StringUtils.isEmpty(mobile) && StringUtils.isEmpty(email)) {
+            return Response.fail("mobile or email should not empty");
+        }
+        
+        if (StringUtils.isNotBlank(mobile)) {
+            
+        } else {
+            
+        }
+        
     }
 
     private String genToken() {
