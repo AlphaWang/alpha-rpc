@@ -2,6 +2,8 @@ package com.alphawang.user.client;
 
 import com.alphawang.rpc.thrift.user.service.api.dto.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
@@ -21,9 +23,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class LoginFilter implements Filter {
+public abstract class LoginFilter implements Filter {
+    
+    private static Cache<String, UserDto> cache = 
+        CacheBuilder.newBuilder()
+            .maximumSize(10000)
+            .expireAfterWrite(3, TimeUnit.MINUTES)
+            .build();
+    
+    
     @Override 
     public void init(FilterConfig filterConfig) throws ServletException {
         
@@ -54,9 +65,20 @@ public class LoginFilter implements Filter {
         if (userDto == null) {
             httpServletResponse.sendRedirect("http://localhost:8082/user/login");
         }
+        
+        login(httpServletRequest, httpServletResponse, userDto);
+        
+        chain.doFilter(request, response);
     }
 
+    protected abstract void login(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, UserDto userDto);
+
     private UserDto requestUserInfo(String token) {
+        UserDto userDto = cache.getIfPresent(token);
+        if (userDto != null) {
+            return userDto;
+        }
+        
         String url = "http://localhost:8082/user/authentication";
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost post = new HttpPost(url);
@@ -78,7 +100,8 @@ public class LoginFilter implements Filter {
                  sb.append(new String(temp, 0, len));
             }
             
-            UserDto userDto = new ObjectMapper().readValue(sb.toString(), UserDto.class);
+            userDto = new ObjectMapper().readValue(sb.toString(), UserDto.class);
+            cache.put(token, userDto);
 
             log.info("=== got user info : {} ", userDto);
             return userDto;
