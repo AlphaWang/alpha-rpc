@@ -34,6 +34,12 @@ public class UserController {
     @Autowired
     private RedisClient redisClient;
     
+    @GetMapping("/login")
+    public String login() {
+        return "/login";
+    }
+    
+    
     @PostMapping("/login")
     @ResponseBody
     public Response<String> login(
