@@ -29,4 +29,8 @@ public class Response<T> implements Serializable {
         response.setData(data);
         return response;
     }
+
+    public static Response exception(Exception e) {
+        return new Response("9999", e.getMessage());
+    }
 }

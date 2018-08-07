@@ -63,7 +63,7 @@ public class UserController {
         // 3. 缓存用户
         UserDto dto = toDto(userInfo);
         redisClient.set(token, dto, 3600);
-        log.info("save redis for {} : {}", username, token);
+        log.info("save redis for {} : {} = {}", username, token, dto);
         
         return Response.success(token);
     }
@@ -118,6 +118,7 @@ public class UserController {
     }
     
     @PostMapping("/register")
+    @ResponseBody
     public Response<String> register(@RequestParam("username") String username,
                              @RequestParam("password") String password,
         @RequestParam(value="mobile", required = false) String mobile,
@@ -127,14 +128,34 @@ public class UserController {
         if (StringUtils.isEmpty(mobile) && StringUtils.isEmpty(email)) {
             return Response.fail("mobile or email should not empty");
         }
-        
-        if (StringUtils.isNotBlank(mobile)) {
-            String code  = redisClient.get(mobile);
-        } else {
-            String code = redisClient.get(email);
-            
+        if (StringUtils.isEmpty(verifyCode)) {
+            return Response.fail("code should not empty");
         }
         
+        String code;
+        if (StringUtils.isNotBlank(mobile)) {
+            code  = redisClient.get(mobile);
+        } else {
+            code = redisClient.get(email);
+        }
+        
+        if (!verifyCode.equals(code)) {
+            return Response.fail("code not match.");
+        }
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUsername(username);
+        userInfo.setPassword(md5(password));
+        userInfo.setMobile(mobile);
+        userInfo.setEmail(email);
+
+        try {
+            serviceProvider.getUserService().registerUser(userInfo);
+        } catch (TException e) {
+            e.printStackTrace();
+            return Response.exception(e);
+        }
+
         return Response.success("");
         
     }
@@ -172,6 +193,11 @@ public class UserController {
      */
     private UserDto toDto(UserInfo userInfo) {
         UserDto dto = new UserDto();
+//        dto.setId(userInfo.getId());
+//        dto.setEmail(userInfo.getEmail());
+//        dto.setPassword(userInfo.getPassword());
+//        dto.setRealName(userInfo.getRealName());
+//        dto.setMobile(userInfo.getMobile());
         BeanUtils.copyProperties(userInfo, dto);
         
         return dto;
