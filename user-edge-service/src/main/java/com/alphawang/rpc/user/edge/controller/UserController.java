@@ -68,27 +68,56 @@ public class UserController {
         return Response.success(token);
     }
     
+    @PostMapping("/sendVerifyCode")
+    @ResponseBody
     public Response sendVerifyCode(
         @RequestParam(value="mobile", required = false) String mobile,
         @RequestParam(value="email", required = false) String email) {
         
         String message = "verify code is:";
         String code = randomCode("0123456789", 6);
+        
+        log.warn("CODE {}", code);
+        return mockSend(mobile, email, message, code);
+    }
 
+    private Response mockSend(String mobile, String email, String message, String code) {
+        if (StringUtils.isNotBlank(mobile)) {
+            redisClient.set(mobile, code);
+        } else if (StringUtils.isNotBlank(email)) {
+            redisClient.set(email, code);
+        } else {
+            return Response.fail("mobile or email should not empty");
+        }
+
+        return Response.success(code);  //just for testing, should not send code in response.
+    }
+    
+    private Response send(String mobile, String email, String message, String code) {
         try {
             boolean result = false;
             if (StringUtils.isNotBlank(mobile)) {
                 result = serviceProvider.getMessageService().sendMobileMessage(mobile, message + code);
+                redisClient.set(mobile, code);
             } else if (StringUtils.isNotBlank(email)) {
                 result = serviceProvider.getMessageService().sendEmailMessage(email, message + code);
+                redisClient.set(email, code);
             } else {
                 return Response.fail("mobile or email should not empty");
             }
+
+            if (!result) {
+                return Response.fail("send msg fail");
+            }
         } catch (TException e) {
             e.printStackTrace();
+            return Response.fail("send msg fail");
         }
+
+        return Response.success(code);  //just for testing, should not send code in response.
     }
     
+    @PostMapping("/register")
     public Response<String> register(@RequestParam("username") String username,
                              @RequestParam("password") String password,
         @RequestParam(value="mobile", required = false) String mobile,
@@ -100,10 +129,13 @@ public class UserController {
         }
         
         if (StringUtils.isNotBlank(mobile)) {
-            
+            String code  = redisClient.get(mobile);
         } else {
+            String code = redisClient.get(email);
             
         }
+        
+        return Response.success("");
         
     }
 
