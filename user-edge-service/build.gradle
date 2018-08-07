@@ -15,6 +15,7 @@ dependencies {
     compile project(':user-thrift-service-api')
     compile project(':message-thrift-api-gen')
     compile 'org.apache.thrift:libthrift:0.11.0'
+    compile 'commons-lang:commons-lang:2.6'
     compile 'org.springframework.boot:spring-boot-starter-web:1.5.3.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-data-redis:1.5.3.RELEASE'
     compile group: 'org.projectlombok', name: 'lombok', version: '1.18.2'
