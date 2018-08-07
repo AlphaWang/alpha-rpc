@@ -1,4 +1,4 @@
-package com.alphawang.rpc.user.edge.dto;
+package com.alphawang.rpc.thrift.user.service.api.dto;
 
 import lombok.Data;
 

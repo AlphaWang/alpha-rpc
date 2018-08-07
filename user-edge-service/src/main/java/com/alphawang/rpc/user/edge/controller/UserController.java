@@ -1,7 +1,7 @@
 package com.alphawang.rpc.user.edge.controller;
 
 import com.alphawang.rpc.thrift.user.service.api.UserInfo;
-import com.alphawang.rpc.user.edge.dto.UserDto;
+import com.alphawang.rpc.thrift.user.service.api.dto.UserDto;
 import com.alphawang.rpc.user.edge.redis.RedisClient;
 import com.alphawang.rpc.user.edge.response.Response;
 import com.alphawang.rpc.user.edge.thrift.ServiceProvider;
@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -24,6 +26,7 @@ import java.util.Random;
 
 @Slf4j
 @Controller
+@RequestMapping("/user")
 public class UserController {
     
     @Autowired
@@ -158,6 +161,12 @@ public class UserController {
 
         return Response.success("");
         
+    }
+    
+    @PostMapping("/authentication")
+    @ResponseBody
+    public UserDto auth(@RequestHeader("token") String token) {
+        return redisClient.get(token);
     }
 
     private String genToken() {
