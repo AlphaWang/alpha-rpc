@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group 'com.alphawang'
+version '0.0.1-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':course-dubbo-service-api')
+    compile project(':user-edge-service')
+    compile 'commons-lang:commons-lang:2.6'
+    compile 'org.springframework.boot:spring-boot-starter-web:1.5.3.RELEASE'
+    compile 'io.dubbo.springboot:spring-boot-starter-dubbo:1.0.0'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.2'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

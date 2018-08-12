@@ -6,4 +6,5 @@ include 'user-edge-service'
 include 'user-edge-service-client'
 include 'course-dubbo-service-api'
 include 'course-dubbo-service'
+include 'course-edge-service'
 
