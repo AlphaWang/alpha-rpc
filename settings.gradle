@@ -4,4 +4,5 @@ include 'user-thrift-service-api'
 include 'user-thrift-service'
 include 'user-edge-service'
 include 'user-edge-service-client'
+include 'course-dubbo-service-api'
 
