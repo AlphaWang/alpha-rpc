@@ -71,9 +71,13 @@ public abstract class LoginFilter implements Filter {
         chain.doFilter(request, response);
     }
 
+    /**
+     * should be customized by sub-class
+     */
     protected abstract void login(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, UserDto userDto);
 
     private UserDto requestUserInfo(String token) {
+        // read cache 
         UserDto userDto = cache.getIfPresent(token);
         if (userDto != null) {
             return userDto;
@@ -101,6 +105,8 @@ public abstract class LoginFilter implements Filter {
             }
             
             userDto = new ObjectMapper().readValue(sb.toString(), UserDto.class);
+            
+            // save cache
             cache.put(token, userDto);
 
             log.info("=== got user info : {} ", userDto);
