@@ -56,6 +56,8 @@ public abstract class LoginFilter implements Filter {
                 }
             }
         }
+        
+        log.info("====Filter: get token {}", token);
 
         UserDto userDto = null;
         if (StringUtils.isNotBlank(token)) {
@@ -63,6 +65,7 @@ public abstract class LoginFilter implements Filter {
         }
         
         if (userDto == null) {
+            log.error("====Filter: NOT login.");
             httpServletResponse.sendRedirect("http://localhost:8082/user/login");
         }
         

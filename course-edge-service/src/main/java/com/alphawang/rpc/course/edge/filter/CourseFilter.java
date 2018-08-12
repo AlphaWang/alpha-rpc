@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CourseFilter extends LoginFilter {
     @Override 
     protected void login(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, UserDto userDto) {
-        log.info("FILTER: user logged in.");
+        log.info("---- CourseFilter: user logged in.");
 
         httpServletRequest.setAttribute("user", userDto);
     }
