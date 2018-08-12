@@ -2,7 +2,8 @@
 .gradle
 /build/
 /*/build/
-/mysql/data/
+/docker/mysql/data/
+/docker/redis/data/
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###

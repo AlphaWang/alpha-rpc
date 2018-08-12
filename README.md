@@ -8,7 +8,7 @@
 
 ## Prerequisites
 
-### install thrift
+### thrift
 https://www.imooc.com/article/30296
 
 1. Download thrift [thrift.apache.org](http://thrift.apache.org)
@@ -22,25 +22,45 @@ make && make install
 ```
 
 
-### run mysql docker
+### mysql
 ```
-cd mysql
+cd docker/mysql
 sh run-mysql.sh
 ```
 
-### db tables:
-`db_user.pe_user`   
-- id int
-- username varchar
-- password varchar
-- real_name varchar
-- mobile varchar
-- email varchar
+or 
 
-### run redis docker
 ```
-cd redis
+#!/usr/bin/env bash
+cur_dir=`pwd`
+docker stop alpha-rpc-mysql
+docker rm alpha-rpc-mysql
+docker run --name alpha-rpc-mysql -v ${cur_dir}/conf:/etc/mysql/conf.d -v ${cur_dir}/data:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=qwer1234 -d mysql:latest
+```
+
+**db tables:**  
+`db_user.pe_user`  
+ 
+- `id` int
+- `username` varchar
+- `password` varchar
+- `real_name` varchar
+- `mobile` varchar
+- `email` varchar
+
+### redis
+```
+cd docker/redis
 sh run-redis.sh
+```
+
+or 
+
+```
+#!/usr/bin/env bash
+docker stop alpha-rpc-redis
+docker rm alpha-rpc-redis
+docker run --name alpha-rpc-redis -idt -p 6379:6379 -v `pwd`/data:/data -v `pwd`/conf/redis.conf:/etc/redis/redis_default.conf redis:latest
 ```
 
 test connection:
@@ -51,3 +71,21 @@ telnet localhost 6379
 set a b
 get a
 ```
+
+### zookeeper for dubbo
+
+```
+cd docker/zookeeper
+sh run-zk.sh
+```
+
+or 
+
+```
+docker stop alpha-rpc-zk
+docker rm alpha-rpc-zk
+docker run --name alpha-rpc-zk -p2181:2181 --restart always -d zookeeper:3.5
+```
+
+
+
