@@ -13,7 +13,8 @@ repositories {
 
 dependencies {
     compile project(':course-dubbo-service-api')
-    compile project(':user-edge-service')
+//    compile project(':user-edge-service')
+    compile project(':user-edge-service-client')
     compile 'commons-lang:commons-lang:2.6'
     compile 'org.springframework.boot:spring-boot-starter-web:1.5.3.RELEASE'
     compile 'io.dubbo.springboot:spring-boot-starter-dubbo:1.0.0'

@@ -1,5 +1,6 @@
 package com.alphawang.rpc.course.service;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.alphawang.rpc.course.mapper.CourserMapper;
 import com.alphawang.rpc.course.service.api.ICourseService;
 import com.alphawang.rpc.course.service.api.dto.CourseDto;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @Slf4j
+@Service
 public class CourseServiceImpl implements ICourseService {
     
     @Autowired
