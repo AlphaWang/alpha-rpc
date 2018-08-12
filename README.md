@@ -39,14 +39,28 @@ docker run --name alpha-rpc-mysql -v ${cur_dir}/conf:/etc/mysql/conf.d -v ${cur_
 ```
 
 **db tables:**  
-`db_user.pe_user`  
- 
+
+1. `db_user.pe_user`   
 - `id` int
 - `username` varchar
 - `password` varchar
 - `real_name` varchar
 - `mobile` varchar
 - `email` varchar
+
+2. `db_user.pe_teacher`
+- `user_id` int
+- `intro` varchar
+- `desc` varchar
+
+3. `db_course.pe_course`
+- `id` int
+- `title` varchar
+- `desc` varchar
+
+4. `db_course.pr_user_course`
+- `user_id` int
+- `course_id` int
 
 ### redis
 ```

@@ -1,4 +1,4 @@
-namespace java com.alphawang.rpc.thrift.user
+namespace java com.alphawang.rpc.thrift.user.service.api
 
 struct UserInfo {
     1:i32 id,
@@ -14,5 +14,6 @@ struct UserInfo {
 service UserService {
     UserInfo getUserById(1:i32 id);
     UserInfo getUserByName(1:string username);
+    UserInfo getTeacherById(1:i32 id);
     void registerUser(1:UserInfo userInfo);
 }
