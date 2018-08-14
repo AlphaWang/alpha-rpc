@@ -102,4 +102,21 @@ docker run --name alpha-rpc-zk -p2181:2181 --restart always -d zookeeper:3.5
 ```
 
 
+## Run
+- message-thrift-service
+- user-thrift-service
+- user-edge-service
+- course-dubbo-service
+- course-client-service
 
+## Test
+- POST http://localhost:8082/user/sendVerifyCode  
+`{"email": "..."} `
+
+- POST http://localhost:8082/user/sendVerifyCode  
+`{"username": "", "password": "", "verifyCode": "", "email": ""}` 
+
+- POST http://localhost:8082/user/login  
+`{"username": "", "password": ""}`
+
+- GET http://localhost:8081/course/list?token=XXX

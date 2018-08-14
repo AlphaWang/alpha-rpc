@@ -27,6 +27,9 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public abstract class LoginFilter implements Filter {
+
+    private static final String AUTH_URL = "http://localhost:8082/user/authentication";
+    private static final String LOGIN_URL = "http://localhost:8082/user/login";
     
     private static Cache<String, UserDto> cache = 
         CacheBuilder.newBuilder()
@@ -66,7 +69,7 @@ public abstract class LoginFilter implements Filter {
         
         if (userDto == null) {
             log.error("====Filter: NOT login.");
-            httpServletResponse.sendRedirect("http://localhost:8082/user/login");
+            httpServletResponse.sendRedirect(LOGIN_URL);
         }
         
         login(httpServletRequest, httpServletResponse, userDto);
@@ -86,14 +89,13 @@ public abstract class LoginFilter implements Filter {
             return userDto;
         }
         
-        String url = "http://localhost:8082/user/authentication";
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost post = new HttpPost(url);
+        HttpPost post = new HttpPost(AUTH_URL);
         post.setHeader("token", token);
 
         InputStream in = null;
         try {
-            log.info("=== posting user info from {} ", url);
+            log.info("=== posting user info from {} ", AUTH_URL);
             HttpResponse response = httpClient.execute(post);
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                 throw new RuntimeException("failed to request user info. " + response.getStatusLine());
