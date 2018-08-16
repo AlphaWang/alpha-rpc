@@ -28,8 +28,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public abstract class LoginFilter implements Filter {
 
-    private static final String AUTH_URL = "http://localhost:8082/user/authentication";
-    private static final String LOGIN_URL = "http://localhost:8082/user/login";
+    // localhost:8080 is Zuul API gateway.
+    private static final String AUTH_URL = "http://localhost:8082/user/authentication";  
+    private static final String LOGIN_URL = "http://localhost:8080/user/login";
     
     private static Cache<String, UserDto> cache = 
         CacheBuilder.newBuilder()

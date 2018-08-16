@@ -109,7 +109,7 @@ docker run --name alpha-rpc-zk -p2181:2181 --restart always -d zookeeper:3.5
 - course-dubbo-service
 - course-client-service
 
-## Test
+## Test without API Gateway
 - POST http://localhost:8082/user/sendVerifyCode  
 `{"email": "..."} `
 
@@ -120,3 +120,8 @@ docker run --name alpha-rpc-zk -p2181:2181 --restart always -d zookeeper:3.5
 `{"username": "", "password": ""}`
 
 - GET http://localhost:8081/course/list?token=XXX
+
+## Test with API Gateway
+
+- http://localhost:8080/course/list
+- http://localhost:8080/user/login
