@@ -10,21 +10,19 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @RestController
-public class LoadBalanceController {
+public class LoadBalancedAnnotationController {
     
     private static String PATH = "/course/list";
     
     @Autowired
-    private LoadBalancerClient loadBalancerClient;
+    private RestTemplate restTemplate;
     
-    @RequestMapping("loadbalance")
+    @RequestMapping("loadbalanced-annotation")
     public String loadBalance() {
-        RestTemplate restTemplate = new RestTemplate(); 
 
-        ServiceInstance serviceInstance = loadBalancerClient.choose("course-edge-service");
-        String url = String.format("http://%s:%s/%s", serviceInstance.getHost(), serviceInstance.getPort(), PATH);
-        String response = restTemplate.getForObject(url, String.class);
-        
+        String response = restTemplate.getForObject("http://course-edge-service/" + PATH, String.class);
+
+        log.info("LoadBalancedAnnotation response: {}", response);
         return response;
     }
 }
